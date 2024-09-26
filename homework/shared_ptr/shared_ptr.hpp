@@ -76,22 +76,22 @@ public:
     }
 
     void reset(T* p = nullptr) {
-    if (p != ptr) {
-        if (control_block) {
-            if (--control_block->shared_count == 0) {
-                delete ptr;
-                if (control_block->weak_count == 0) {
-                    delete control_block;
+        if (p != ptr) {
+            if (control_block) {
+                if (--control_block->shared_count == 0) {
+                    delete ptr;
+                    if (control_block->weak_count == 0) {
+                        delete control_block;
+                    }
                 }
             }
-        }
-        ptr = p;
-        if (p) {
-            control_block = new ControlBlock();
-        } else {
-            control_block = nullptr;
+            ptr = p;
+            if (p) {
+                control_block = new ControlBlock();
+            } else {
+                control_block = nullptr;
+            }
         }
     }
-}
 };
 }  // namespace my
