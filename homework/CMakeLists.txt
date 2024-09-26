@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #include of shared_ptr.hpp
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/shared_ptr)
 
 #GTest include
 include(FetchContent)
@@ -17,7 +17,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 #Test executable
-add_executable(shared_ptr_tests shared_ptr_tests.cpp)
+add_executable(shared_ptr_tests shared_ptr/shared_ptr_tests.cpp)
 
 #Link GTest
 target_link_libraries(shared_ptr_tests gtest gtest_main)
