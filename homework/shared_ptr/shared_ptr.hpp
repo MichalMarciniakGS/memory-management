@@ -1,8 +1,6 @@
 #pragma once
 #include <atomic>
 
-//test
-
 namespace my {
 
 template <typename T>
@@ -31,16 +29,16 @@ public:
         }
     }
 
-    // shared_ptr& operator=(const shared_ptr& otherSharedPtr) {
-    //     shared_ptr(otherSharedPtr).swap(*this);
-    //     return *this;
-    // }
+    shared_ptr& operator=(const shared_ptr& otherSharedPtr) {
+        shared_ptr(otherSharedPtr).swap(*this);
+        return *this;
+    }
 
-    // shared_ptr(shared_ptr&& otherSharedPtr) noexcept
-    //     : ptr(otherSharedPtr.ptr), control_block(otherSharedPtr.control_block) {
-    //     otherSharedPtr.ptr = nullptr;
-    //     otherSharedPtr.control_block = nullptr;
-    // }
+    shared_ptr(shared_ptr&& otherSharedPtr) noexcept
+        : ptr(otherSharedPtr.ptr), control_block(otherSharedPtr.control_block) {
+        otherSharedPtr.ptr = nullptr;
+        otherSharedPtr.control_block = nullptr;
+    }
 
     shared_ptr& operator=(shared_ptr&& otherSharedPtr) noexcept {
         shared_ptr(std::move(otherSharedPtr)).swap(*this);
