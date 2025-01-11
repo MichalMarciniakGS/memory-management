@@ -4,6 +4,9 @@
 namespace my {
 
 template <typename T>
+class weak_ptr;  // Forward declaration
+
+template <typename T>
 class shared_ptr {
 private:
     T* ptr;
@@ -17,6 +20,12 @@ private:
             : shared_count(1), weak_count(0), deleter(nullptr) {}
     };
     ControlBlock* control_block;
+
+    // Private constructor for weak_ptr::lock()
+    shared_ptr(T* p, ControlBlock* cb) noexcept
+        : ptr(p), control_block(cb) {}
+
+    friend class weak_ptr<T>;  // Add this line to make weak_ptr a friend
 
 public:
     explicit shared_ptr(T* p = nullptr)
