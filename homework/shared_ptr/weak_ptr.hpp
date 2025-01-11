@@ -62,13 +62,13 @@ public:
 
     void reset() noexcept {
         if (control_block) {
-            control_block->weak_count--;
-            if (control_block->weak_count == 0 && control_block->shared_count == 0) {
+            --control_block->weak_count;
+            if (control_block->shared_count == 0 && control_block->weak_count == 0) {
                 delete control_block;
             }
-            ptr = nullptr;
-            control_block = nullptr;
         }
+        ptr = nullptr;
+        control_block = nullptr;
     }
 
     std::size_t use_count() const noexcept {
@@ -80,13 +80,14 @@ public:
     }
 
     shared_ptr<T> lock() const noexcept {
-        if (expired()) {
+        if (expired() || !control_block) {
             return shared_ptr<T>();
         }
+        
         shared_ptr<T> sp;
-        sp.ptr = ptr;
-        sp.control_block = control_block;
-        if (control_block) {
+        if (control_block->shared_count > 0) {
+            sp.ptr = ptr;
+            sp.control_block = control_block;
             ++control_block->shared_count;
         }
         return sp;
