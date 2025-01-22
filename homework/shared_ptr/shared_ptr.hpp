@@ -72,13 +72,17 @@ public:
     ~shared_ptr() {
         if (control_block) {
             if (--control_block->shared_count == 0) {
-                if (ptr && control_block->deleter) {
+                if (control_block->deleter) {
                     control_block->deleter(ptr);
+                    control_block = nullptr;
+                    ptr = nullptr;
                 } else {
                     delete ptr;
-                }
-                if (control_block->weak_count == 0) {
-                    delete control_block;
+                    if (control_block->weak_count == 0) {
+                        delete control_block;
+                    }
+                    control_block = nullptr;
+                    ptr = nullptr;
                 }
             }
         }
