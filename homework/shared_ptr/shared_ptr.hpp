@@ -4,9 +4,12 @@
 
 namespace my {
 
-template <typename T> class weak_ptr;  // Forward declaration
-template <typename T> class shared_ptr;  // Forward declaration
-template <typename T, typename... Args> shared_ptr<T> make_shared(Args&&... args);
+template <typename T>
+class weak_ptr;  // Forward declaration
+template <typename T>
+class shared_ptr;  // Forward declaration
+template <typename T, typename... Args>
+shared_ptr<T> make_shared(Args&&... args);
 
 template <typename T>
 class shared_ptr {
@@ -26,10 +29,9 @@ private:
         ControlBlock control;
         T object;
 
-        template<typename... Args>
+        template <typename... Args>
         ControlBlockWithObject(Args&&... args)
-            : control()
-            , object(std::forward<Args>(args)...) {}
+            : control(), object(std::forward<Args>(args)...) {}
     };
 
     ControlBlock* control_block;
@@ -39,7 +41,7 @@ private:
         : ptr(p), control_block(cb) {}
 
     friend class weak_ptr<T>;
-    template<typename U, typename... Args>
+    template <typename U, typename... Args>
     friend shared_ptr<U> make_shared(Args&&... args);
 
 public:
