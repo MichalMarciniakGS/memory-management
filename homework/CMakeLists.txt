@@ -22,12 +22,15 @@ FetchContent_MakeAvailable(googletest)
 #Test executable
 add_executable(shared_ptr_tests shared_ptr/shared_ptr_tests.cpp)
 add_executable(weak_ptr_tests shared_ptr/weak_ptr_tests.cpp)
+add_executable(make_shared_tests shared_ptr/make_shared_tests.cpp)
 
 #Link GTest
 target_link_libraries(shared_ptr_tests GTest::gtest GTest::gtest_main)
 target_link_libraries(weak_ptr_tests GTest::gtest GTest::gtest_main)
+target_link_libraries(make_shared_tests GTest::gtest GTest::gtest_main)
 
 enable_testing()
 
 add_test(NAME SharedPtrTests COMMAND shared_ptr_tests)
 add_test(NAME WeakPtrTests COMMAND weak_ptr_tests)
+add_test(NAME MakeSharedTests COMMAND make_shared_tests)

@@ -1,10 +1,12 @@
 #pragma once
 #include <atomic>
+#include <utility>
 
 namespace my {
 
-template <typename T>
-class weak_ptr;  // Forward declaration
+template <typename T> class weak_ptr;  // Forward declaration
+template <typename T> class shared_ptr;  // Forward declaration
+template <typename T, typename... Args> shared_ptr<T> make_shared(Args&&... args);
 
 template <typename T>
 class shared_ptr {
@@ -19,13 +21,26 @@ private:
         ControlBlock()
             : shared_count(1), weak_count(0), deleter(nullptr) {}
     };
+
+    struct ControlBlockWithObject {
+        ControlBlock control;
+        T object;
+
+        template<typename... Args>
+        ControlBlockWithObject(Args&&... args)
+            : control()
+            , object(std::forward<Args>(args)...) {}
+    };
+
     ControlBlock* control_block;
 
-    // Private constructor for weak_ptr::lock()
+    // Private constructor for weak_ptr::lock() and make_shared
     shared_ptr(T* p, ControlBlock* cb) noexcept
         : ptr(p), control_block(cb) {}
 
-    friend class weak_ptr<T>;  // Add this line to make weak_ptr a friend
+    friend class weak_ptr<T>;
+    template<typename U, typename... Args>
+    friend shared_ptr<U> make_shared(Args&&... args);
 
 public:
     explicit shared_ptr(T* p = nullptr)
